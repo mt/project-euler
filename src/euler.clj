@@ -6,20 +6,22 @@
    Find the sum of all the multiples of 3 or 5 below 1000."
   []
   (let [ naturals (iterate inc 0)
+         lt1000 #(< % 1000)
          mod35 #(or (== 0 (mod % 3))
                     (== 0 (mod % 5)))]
     (->> naturals
-        (take 1000)
+        (take-while lt1000)
         (filter mod35)
-        (apply +))))
-
+        (reduce +))))
 
 (defn problem002 
   "By considering the terms in the Fibonacci sequence whose values do not exceed 
    four million, find the sum of the even-valued terms."
   [] 
-  (loop [acc 0 f0 1 f1 2]
-    (cond 
-      (> f0 4000000) acc
-      (== 0 (mod f0 2)) (recur (+ f0 acc) f1 (+ f1 f0))
-      :else (recur acc f1 (+ f1 f0)))))
+  (let [ fgen (fn [[a b]] [b (+ a b)])
+         fibs (map first (iterate fgen [1 1]))
+         lt4million #(< % 4000000)]
+    (->> fibs
+        (take-while lt4million)
+        (filter even?)
+        (reduce +))))
