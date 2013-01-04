@@ -25,3 +25,14 @@
         (take-while lt4million)
         (filter even?)
         (reduce +))))
+
+(defn problem003 
+  "What is the largest prime factor of the number 600851475143?"
+  [] 
+  (let [ fgen (fn [[a b]] [b (+ a b)])
+         fibs (map first (iterate fgen [1 1]))
+         lt4million #(< % 4000000)]
+    (->> fibs
+        (take-while lt4million)
+        (filter even?)
+        (reduce +))))
