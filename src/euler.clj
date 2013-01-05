@@ -1,4 +1,5 @@
-(ns euler)
+(ns euler
+  (:import [java.util BitSet]))
 
 (defn problem001 
   "If we list all the natural numbers below 10 that are multiples of 3 or 5, 
@@ -14,17 +15,33 @@
         (filter mod35)
         (reduce +))))
 
+(def fibonaccni 
+  "A lazy list of Fibonaccni numbers"
+  (map first 
+    (iterate 
+      (fn [[a b]] [b (+ a b)])
+      [1 1])))
+
 (defn problem002 
   "By considering the terms in the Fibonacci sequence whose values do not exceed 
    four million, find the sum of the even-valued terms."
   [] 
-  (let [ fgen (fn [[a b]] [b (+ a b)])
-         fibs (map first (iterate fgen [1 1]))
-         lt4million #(< % 4000000)]
-    (->> fibs
-        (take-while lt4million)
+    (->> fibonaccni
+        (take-while #(< % 4000000))
         (filter even?)
-        (reduce +))))
+        (reduce +)))
+
+(def primes 
+  "A lazy list of primes"
+  (map first 
+    (iterate 
+      (fn [[p pset]] 
+        (loop [candidate (inc p)]
+          (if (nil? (some #(== 0 (mod candidate %)) pset))
+            [candidate (conj pset candidate)]
+            (recur (inc candidate))) ))
+
+      [2 (sorted-set 2)])))
 
 (defn problem003 
   "What is the largest prime factor of the number 600851475143?"
@@ -36,3 +53,5 @@
         (take-while lt4million)
         (filter even?)
         (reduce +))))
+
+
