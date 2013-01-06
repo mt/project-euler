@@ -1,5 +1,6 @@
 (ns euler
-  (:import [java.util BitSet]))
+  (:import [java.util BitSet])
+  (:require [clojure.math.numeric-tower :as m]))
 
 (defn problem001 
   "If we list all the natural numbers below 10 that are multiples of 3 or 5, 
@@ -31,27 +32,24 @@
         (filter even?)
         (reduce +)))
 
+; http://diditwith.net/2009/01/20/YAPESProblemSevenPart2.aspx
 (def primes 
   "A lazy list of primes"
   (map first 
     (iterate 
+
       (fn [[p pset]] 
         (loop [candidate (inc p)]
           (if (nil? (some #(== 0 (mod candidate %)) pset))
             [candidate (conj pset candidate)]
-            (recur (inc candidate))) ))
+            (recur (inc candidate)))))
 
-      [2 (sorted-set 2)])))
+      [2 #{2}])))
 
 (defn problem003 
   "What is the largest prime factor of the number 600851475143?"
   [] 
-  (let [ fgen (fn [[a b]] [b (+ a b)])
-         fibs (map first (iterate fgen [1 1]))
-         lt4million #(< % 4000000)]
-    (->> fibs
-        (take-while lt4million)
-        (filter even?)
-        (reduce +))))
+    (->> primes
+        (take-while #(< % (m/sqrt 600851475143)))))
 
 
