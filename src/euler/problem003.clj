@@ -47,7 +47,7 @@
   "What is the largest prime factor of the number 600851475143?"
   [] 
   (->> 600851475143 
-    (euler.problem003/prime-factors) 
+    (prime-factors) 
     (reduce max)))
 
 
