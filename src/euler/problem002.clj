@@ -1,6 +1,4 @@
-(ns euler.problem002
-  (:import [java.util BitSet])
-  (:require [clojure.math.numeric-tower :as m]))
+(ns euler.problem002)
 
 (def fibonaccni 
   "A lazy list of Fibonaccni numbers"
